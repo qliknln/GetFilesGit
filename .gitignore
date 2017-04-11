@@ -90,3 +90,6 @@ ENV/
 
 #pyCharm project folder
 .idea/
+
+#To avoid uploading credentials
+Repository_data.*
