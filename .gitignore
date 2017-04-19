@@ -92,4 +92,4 @@ ENV/
 .idea/
 
 #To avoid uploading credentials
-Repository_data.*
+Repository_data.py

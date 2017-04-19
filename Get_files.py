@@ -1,5 +1,6 @@
 import git
 import os
+import time
 import shutil
 from Repository_data import git_input
 
@@ -8,7 +9,11 @@ from Repository_data import git_input
 def get_files():
     clone_url = 'https://' + git_input['username'] + ':' + git_input['password'] + '@' + git_input['git_url']
     local_repo_path = git_input['repo_dir']
-    shutil.rmtree(local_repo_path, True)
+    if not os.path.exists(local_repo_path):
+        os.mkdir(local_repo_path)
+        time.sleep(5)
+    else:
+        shutil.rmtree(local_repo_path, True)
     git_info_folder = os.path.join(local_repo_path, '.git/info')
     repo = git.Repo.init(local_repo_path)
     origin = repo.create_remote('origin', clone_url)
@@ -17,9 +22,9 @@ def get_files():
     info_file = open(os.path.join(git_info_folder, 'sparse-checkout'), 'w')
     s = ''
     for folder_str in git_input['data_file_folders']:
-        s = folder_str + '\n' + s
-        info_file.write(s[:-1])
-        info_file.close()
+        s = folder_str + '\n'
+        info_file.write(s)
+    info_file.close()
     fetch_kwargs = {'depth': 1}
     origin.fetch('master', **fetch_kwargs)
     origin.pull(origin.refs[0].remote_head)
